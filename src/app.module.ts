@@ -2,20 +2,29 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './typeorm/entities/User';
+import { NotesModule } from './notes/notes.module';
+import { Notes } from './typeorm/entities/Notes';
+import { config } from './config';
+import * as fs from 'fs'
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'admin@123',
-      database: 'notesdb',
-      entities: [User],
+      url: config.DB_URL,
+      host: config.DB_HOST,
+      port: 4000,
+      username: config.DB_USERNAME,
+      password: config.DB_PASSWORD,
+      database: 'test',
+      ssl : {
+        ca : fs.readFileSync('./src/certs/isrgrootx1.pem'),
+      },
+      entities: [User,Notes],
       synchronize: true,
     }),
-    UserModule
+    UserModule,
+    NotesModule
   ],
   controllers: [],
   providers: [],

@@ -61,9 +61,11 @@ export class UserServices {
             if(!isPasswordValid){
                 throw new BadRequestException("Invalid Credentials")
             }
-            const token = this.jwtService.generateToken({ id: user.id, email: user.email });
+            const token = await this.jwtService.generateToken({ id: ExistingUser.id, email: user.email });
             return {
                     message: "Login Success",
+                    username : ExistingUser?.name,
+                    access_token : token,
                     statusCode: 201,
                 }
         }
