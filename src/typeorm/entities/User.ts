@@ -1,10 +1,11 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Notes } from './Notes';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn({type:'bigint'})
-  id: number;
+  @PrimaryGeneratedColumn()
+  id: string;
 
   @Column()
   name: string;
@@ -17,4 +18,7 @@ export class User {
 
   @Column()
   createdAt : Date;
+
+  @OneToMany(() => Notes,(note) => note.user)
+  notes : Notes[];
 }

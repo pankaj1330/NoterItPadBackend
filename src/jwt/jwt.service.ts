@@ -1,13 +1,17 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import {config} from '../../config.js'
+import {config} from '../config.js'
 
 @Injectable()
 export class JwtServices {
     constructor(private jwtService : JwtService){}
 
-    generateToken(payload : {email: string, id: string}){
-        return this.jwtService.sign(payload);
+    async generateToken(payload : {email: string, id: string | number}){
+        const token = await this.jwtService.signAsync(payload);
+        if(!token){
+            throw new InternalServerErrorException("something went wrong");
+        }
+        return token;
     }
 
     validateToken(token : string){
